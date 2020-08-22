@@ -11,23 +11,42 @@ function pointIsInsidePolygon(point, polygon) {
 
 	// The relative position of the point to the polygon will be determined based on the number
 	// of intersections of the horizontal line drawn starting from the point toward increasing
-	// the x-axis
+	// the x-axis.
 
-	var intersections = 0; // Number of intersections
+	var intersections = 0; // Number of intersections.
 
-	for (var i = 0; i < polygon.length; i++) { // Loop throw all of the polygon sides
-		var startPoint = polygon[i]; // Start point of the side
-		var endPoint = polygon[i + 1] || polygon[0]; // End point of the side
-		var minX = Math.min(startPoint.x, endPoint.x); // Minimum x-coordinate of the side
-		var maxX = Math.max(startPoint.x, endPoint.x); // Maximum x-coordinate of the side
+	for (var i = 0; i < polygon.length; i++) { // Loop throw all of the polygon sides.
+		var startPoint = polygon[i]; // Start point of the side.
+		var endPoint = polygon[i + 1] || polygon[0]; // End point of the side.
+		var minX = Math.min(startPoint.x, endPoint.x); // Minimum x-coordinate of the side.
+		var maxX = Math.max(startPoint.x, endPoint.x); // Maximum x-coordinate of the side.
+		var minY = Math.min(startPoint.y, endPoint.y); // Minimum y-coordinate of the side.
+		var maxY = Math.max(startPoint.y, endPoint.y); // Maximum y-coordinate of the side.
 
-		if (startPoint.y === endPoint.y) { // If the side is a horizontal line
+		if (startPoint.y === endPoint.y) { // If the side is a horizontal line.
 			if (
 				point.y === startPoint.y &&
-				point.x >= minX &&
-				point.x <= maxX
+				point.x >= minX && point.x <= maxX // Point is between (start & end) points.
 			) {
-				return {onBorders: true};
+				return {onBorder: true};
+			}
+		}
+
+		// If the side is NOT a horizontal line. And Exclude the scenario where the intersection
+		// point is ths start point of the side to make sure that it is not counted twice. Once
+		// when it is at the start of the side, and once when it is at the end of another side.
+		else if (point.y !== startPoint.y) {
+			var intersectionX = (point.y - startPoint.y) * (endPoint.x - startPoint.x) / (
+				endPoint.y - startPoint.y
+			) + startPoint.x;
+
+			// Intersection point should be between (start & end) points.
+			intersectionX = intersectionX >= minX && intersectionX <= maxX &&
+											point.y >= minY && point.y <= maxY &&
+											intersectionX;
+
+			if (intersectionX === point.x) { // If the intersection point is the point itself.
+				return {onBorder: true};
 			}
 		}
 	}

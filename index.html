@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Check If Point Is Inside Polygon</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<h1>Check If Point Is Inside Polygon</h1>
+
+	<div class="container">
+		<h2>Polygon:</h2>
+		<label>
+			X:
+			<input type="number" id="polygon-x"/>
+		</label>
+		<label>
+			Y:
+			<input type="number" id="polygon-y"/>
+		</label>
+		<button id="add">Add</button>
+		<button id="clear">Clear</button>
+		<ol id="polygon-list"></ol>
+	</div>
+
+	<div class="container">
+		<h2>Point:</h2>
+		<label>
+			X:
+			<input type="number" id="point-x"/>
+		</label>
+		<label>
+			Y:
+			<input type="number" id="point-y"/>
+		</label>
+		<button id="check">Check</button>
+	</div>
+
+	<div class="container">
+		<h2>Chart:</h2>
+		<canvas id="canvas"></canvas>
+	</div>
+
+	<script src="point-is-inside-polygon.js"></script>
+	<script src="index.js"></script>
+</body>
+</html>

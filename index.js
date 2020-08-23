@@ -1,76 +1,131 @@
-function pointIsInsidePolygon(point, polygon) {
-	// Region arguments validation.
-	if (!point || typeof point.x !== 'number' || typeof point.y !== 'number') {
-		return {error: 'First argument should be a point with 2 (x & y) coordinate'};
+var pointX = document.getElementById('point-x');
+var pointY = document.getElementById('point-y');
+var polygonX = document.getElementById('polygon-x');
+var polygonY = document.getElementById('polygon-y');
+var addButton = document.getElementById('add');
+var clearButton = document.getElementById('clear');
+var polygonList = document.getElementById('polygon-list');
+var checkButton = document.getElementById('check');
+var canvas = document.getElementById('canvas');
+
+var polygon = [];
+
+addButton.addEventListener('click', function() {
+	var x = parseInt(polygonX.value, 10) || 0;
+	var y = parseInt(polygonY.value, 10) || 0;
+	polygon.push({x: x, y: y});
+	var newPoint = document.createElement('li');
+	newPoint.innerText = 'X: ' + x + ', Y: ' + y;
+	polygonList.appendChild(newPoint);
+});
+
+clearButton.addEventListener('click', function() {
+	polygon = [];
+	polygonList.innerText = '';
+});
+
+checkButton.addEventListener('click', function() {
+	var x = parseInt(pointX.value, 10) || 0;
+	var y = parseInt(pointY.value, 10) || 0;
+	console.log(pointIsInsidePolygon({x: x, y: y}, polygon));
+	canvas.width = window.innerWidth - 42;
+	canvas.height = (window.innerWidth - 42) / 2;
+	var ctx = canvas.getContext('2d');
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	var minXCoord = Math.min(...polygon.map(function(point) {
+		return point.x;
+	}), x, -7) - 3;
+	var maxXCoord = Math.max(...polygon.map(function(point) {
+		return point.x;
+	}), x) + 3;
+	var minYCoord = Math.min(...polygon.map(function(point) {
+		return point.y;
+	}), y, -7) - 3;
+	var maxYCoord = Math.max(...polygon.map(function(point) {
+		return point.y;
+	}), y) + 3;
+	var scale;
+	if (maxXCoord - minXCoord > 2 * (maxYCoord - minYCoord)) {
+		scale = canvas.width / (maxXCoord - minXCoord);
 	}
-	if (!Array.isArray(polygon) || polygon.length < 3) {
-		return {error:
-			'Second argument should be an array of at least 3 points with 2 (x & y) coordinate'};
+	else {
+		scale = canvas.height / (maxYCoord - minYCoord);
 	}
+	
+	// Region Draw x-axis & y-axis.
+	ctx.beginPath();
+	ctx.moveTo(-minXCoord * scale, canvas.height);
+	ctx.lineTo(-minXCoord * scale, 0);
+	ctx.moveTo(0, canvas.height + minYCoord * scale);
+	ctx.lineTo(canvas.width, canvas.height + minYCoord * scale);
+	ctx.lineWidth = 1;
+	ctx.stroke();
 	// End region.
 
-	// The relative position of the point to the polygon will be determined based on the number
-	// of intersections of the horizontal line drawn starting from the point toward increasing
-	// the x-axis.
+	// Region Draw the polygon.
+	ctx.beginPath();
+	ctx.moveTo(
+		(polygon[polygon.length - 1].x - minXCoord) * scale,
+		canvas.height - (polygon[polygon.length - 1].y - minYCoord) * scale
+	);
+	for (var i = 0; i < polygon.length; i++) {
+		ctx.lineTo(
+			(polygon[i].x - minXCoord) * scale,
+			canvas.height - (polygon[i].y - minYCoord) * scale
+		);
+	}
+	ctx.lineWidth = 1;
+	ctx.fillStyle = 'yellow';
+	ctx.fill();
+	ctx.stroke();
+	// End region.
 
-	var intersections = 0; // Number of intersections.
+	// Region Draw a horizontal line starting from the point.
+	ctx.beginPath();
+	ctx.moveTo((x - minXCoord) * scale, canvas.height - (y - minYCoord) * scale);
+	ctx.lineTo(canvas.width, canvas.height - (y - minYCoord) * scale);
+	ctx.setLineDash([3, 9]);
+	ctx.strokeStyle = 'blue';
+	ctx.stroke();
+	// End region.
 
+	// Region Draw intersection points.
 	for (var i = 0; i < polygon.length; i++) { // Loop throw all of the polygon sides.
 		var startPoint = polygon[i]; // Start point of the side.
 		var endPoint = polygon[i + 1] || polygon[0]; // End point of the side.
-		var minX = Math.min(startPoint.x, endPoint.x); // Minimum x-coordinate of the side.
-		var maxX = Math.max(startPoint.x, endPoint.x); // Maximum x-coordinate of the side.
-		var minY = Math.min(startPoint.y, endPoint.y); // Minimum y-coordinate of the side.
-		var maxY = Math.max(startPoint.y, endPoint.y); // Maximum y-coordinate of the side.
-
-		if (startPoint.y === endPoint.y) { // If the side is a horizontal line.
-			if (
-				point.y === startPoint.y &&
-				point.x >= minX && point.x <= maxX // Point is between (start & end) points.
-			) {
-				return {inside: false, outside: false, onBorder: true};
-			}
-		}
 
 		// If the side is NOT a horizontal line. And Exclude the scenario where the intersection
 		// point is the end point of the side to make sure that it is not counted twice. Once
 		// when it is at the start of a side, and once when it is at the end of another side.
-		else if (point.y !== endPoint.y) {
-			var intersectionX = (point.y - startPoint.y) * (endPoint.x - startPoint.x) / (
+		if (startPoint.y !== endPoint.y && y !== endPoint.y) {
+			var intersectionX = (y - startPoint.y) * (endPoint.x - startPoint.x) / (
 				endPoint.y - startPoint.y
 			) + startPoint.x;
 
 			// Intersection point should be between (start & end) points.
-			intersectionX = intersectionX >= minX && intersectionX <= maxX &&
-											point.y >= minY && point.y <= maxY &&
+			intersectionX = intersectionX >= Math.min(startPoint.x, endPoint.x) &&
+											intersectionX <= Math.max(startPoint.x, endPoint.x) &&
+											y >= Math.min(startPoint.y, endPoint.y) &&
+											y <= Math.max(startPoint.y, endPoint.y) &&
 											intersectionX;
 
-			if (intersectionX === point.x) { // If the intersection point is the point itself.
-				return {inside: false, outside: false, onBorder: true};
-			}
-
-			// Accept only intersections in the direction of increasing the x-axis.
-			if (intersectionX > point.x) {
-				if (point.y === startPoint.y) {
-					// Region Make sure that the intersection point is not just a point of tangency.
-					var prevPointIndex = (i - 1 + polygon.length) % polygon.length;
-					while (polygon[prevPointIndex].y === startPoint.y) {
-						prevPointIndex = (prevPointIndex - 1 + polygon.length) % polygon.length;
-					}
-					if (
-						point.y > Math.min(polygon[prevPointIndex].y, endPoint.y) &&
-						point.y < Math.max(polygon[prevPointIndex].y, endPoint.y)
-					) {
-						intersections++;
-					}
-					// End region.
-				}
-				else {
-					intersections++;
-				}
+			// Intersection point should NOT be the point itself, and it should also be
+			// in the direction of increasing the x-axis.
+			if (intersectionX !== false && intersectionX > x) {
+				ctx.fillStyle='blue';
+				ctx.fillRect(
+					(intersectionX - minXCoord) * scale - 3,
+					canvas.height - (y - minYCoord) * scale - 3,
+					6,
+					6
+				);
 			}
 		}
 	}
-	return {inside: intersections % 2 === 1, outside: intersections % 2 === 0, onBorder: false};
-}
-pointIsInsidePolygon();
+	// End region.
+
+	// Region Draw the point.
+	ctx.fillStyle='red';
+	ctx.fillRect((x - minXCoord) * scale - 3, canvas.height - (y - minYCoord) * scale - 3, 6, 6);
+	// End region.
+});

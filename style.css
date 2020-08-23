@@ -1,0 +1,15 @@
+body {
+	margin: 0;
+}
+h1 {
+	margin: 10px;
+}
+.container {
+	border: 1px solid black;
+	margin: 10px;
+	padding: 10px;
+}
+#canvas {
+	width: calc(100vw - 42px);
+	height: calc((100vw - 42px) / 2);
+}

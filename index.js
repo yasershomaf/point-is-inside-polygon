@@ -1,5 +1,5 @@
 function pointIsInsidePolygon(point, polygon) {
-	// Region arguments validation
+	// Region arguments validation.
 	if (!point || typeof point.x !== 'number' || typeof point.y !== 'number') {
 		return {error: 'First argument should be a point with 2 (x & y) coordinate'};
 	}
@@ -7,7 +7,7 @@ function pointIsInsidePolygon(point, polygon) {
 		return {error:
 			'Second argument should be an array of at least 3 points with 2 (x & y) coordinate'};
 	}
-	// End region
+	// End region.
 
 	// The relative position of the point to the polygon will be determined based on the number
 	// of intersections of the horizontal line drawn starting from the point toward increasing
@@ -28,14 +28,14 @@ function pointIsInsidePolygon(point, polygon) {
 				point.y === startPoint.y &&
 				point.x >= minX && point.x <= maxX // Point is between (start & end) points.
 			) {
-				return {onBorder: true};
+				return {inside: false, outside: false, onBorder: true};
 			}
 		}
 
 		// If the side is NOT a horizontal line. And Exclude the scenario where the intersection
-		// point is ths start point of the side to make sure that it is not counted twice. Once
-		// when it is at the start of the side, and once when it is at the end of another side.
-		else if (point.y !== startPoint.y) {
+		// point is the end point of the side to make sure that it is not counted twice. Once
+		// when it is at the start of a side, and once when it is at the end of another side.
+		else if (point.y !== endPoint.y) {
 			var intersectionX = (point.y - startPoint.y) * (endPoint.x - startPoint.x) / (
 				endPoint.y - startPoint.y
 			) + startPoint.x;
@@ -46,10 +46,31 @@ function pointIsInsidePolygon(point, polygon) {
 											intersectionX;
 
 			if (intersectionX === point.x) { // If the intersection point is the point itself.
-				return {onBorder: true};
+				return {inside: false, outside: false, onBorder: true};
+			}
+
+			// Accept only intersections in the direction of increasing the x-axis.
+			if (intersectionX > point.x) {
+				if (point.y === startPoint.y) {
+					// Region Make sure that the intersection point is not just a point of tangency.
+					var prevPointIndex = (i - 1 + polygon.length) % polygon.length;
+					while (polygon[prevPointIndex].y === startPoint.y) {
+						prevPointIndex = (prevPointIndex - 1 + polygon.length) % polygon.length;
+					}
+					if (
+						point.y > Math.min(polygon[prevPointIndex].y, endPoint.y) &&
+						point.y < Math.max(polygon[prevPointIndex].y, endPoint.y)
+					) {
+						intersections++;
+					}
+					// End region.
+				}
+				else {
+					intersections++;
+				}
 			}
 		}
 	}
-	return {};
+	return {inside: intersections % 2 === 1, outside: intersections % 2 === 0, onBorder: false};
 }
 pointIsInsidePolygon();

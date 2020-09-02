@@ -61,4 +61,4 @@ The relative position of the ***point*** to the ***polygon*** will be determined
 
 ## Author:
 
-<div style="width: 350px; align-items: center; border: 1px solid #ddd; padding: 10px 10px 10px 30px; border-radius: 10px; box-shadow: 0px 0px 6px #ddd"><div style="float: left;"><div>Yaser Somaf</div><a href="https://github.com/yasershomaf">https://github.com/yasershomaf</a><a href="mailto:yasershomaf@gmail.com">yasershomaf@gmail.com</a></div><img src="https://avatars1.githubusercontent.com/u/28219390?s=400&u=e57cc257a4e7210045a942dc28be0d602f3dae46&v=4" alt="Yaser&apos;s avatar" style="float: left; width: 100px; height: 100px; border-radius: 50%;"/></div>
+<table><tr><td>Yaser Somaf<br/><a href="https://github.com/yasershomaf">https://github.com/yasershomaf</a><br/><a href="mailto:yasershomaf@gmail.com">yasershomaf@gmail.com</a></td><td><img src="https://avatars1.githubusercontent.com/u/28219390?s=400&u=e57cc257a4e7210045a942dc28be0d602f3dae46&v=4" alt="Yaser&apos;s avatar" style="width: 100px; height: 100px; border-radius: 50%;"/></td></tr></table>

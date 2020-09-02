@@ -4,7 +4,7 @@ Algorithm to determine whether a point is inside a polygon
 
 ## Getting started:
 
-Copy the ***pointIsInsidePolygon*** function code from [point-is-inside-polygon.js](https://github.com/yasershomaf/point-is-inside-polygon/blob/master/point-is-inside-polygon.js) and include it in your code.
+Copy the ***pointIsInsidePolygon*** function code from [point-is-inside-polygon.js](https://github.com/yasershomaf/point-is-inside-polygon/blob/master/src/js/point-is-inside-polygon.js) and include it in your code.
 
 ## Usage:
 
@@ -57,10 +57,10 @@ const position = pointIsInsidePolygon(point, polygon);
 
 The relative position of the ***point*** to the ***polygon*** will be determined based on ***number of intersections*** between the ***polygon*** & the ***horizontal line*** drawn starting from the ***point*** toward ***increasing the x-axis***.
 * If ***number of intersections*** was ***odd***, then the ***point*** is inside the ***polygon***.
-![](https://raw.githubusercontent.com/yasershomaf/point-is-inside-polygon/master/inside.jpg)
+![Point is inside polygon](https://raw.githubusercontent.com/yasershomaf/point-is-inside-polygon/master/inside.jpg)
 
 * If ***number of intersections*** was ***even***, then the ***point*** is outside the ***polygon***.
-![](https://raw.githubusercontent.com/yasershomaf/point-is-inside-polygon/master/outside.jpg)
+![Point is outside polygon](https://raw.githubusercontent.com/yasershomaf/point-is-inside-polygon/master/outside.jpg)
 
 *Clone the repository and run **index.html** in your browser to test it.*
 

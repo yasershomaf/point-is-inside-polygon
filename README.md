@@ -57,7 +57,12 @@ const position = pointIsInsidePolygon(point, polygon);
 
 The relative position of the ***point*** to the ***polygon*** will be determined based on ***number of intersections*** between the ***polygon*** & the ***horizontal line*** drawn starting from the ***point*** toward ***increasing the x-axis***.
 * If ***number of intersections*** was ***odd***, then the ***point*** is inside the ***polygon***.
+![](https://raw.githubusercontent.com/yasershomaf/point-is-inside-polygon/master/inside.jpg)
+
 * If ***number of intersections*** was ***even***, then the ***point*** is outside the ***polygon***.
+![](https://raw.githubusercontent.com/yasershomaf/point-is-inside-polygon/master/outside.jpg)
+
+*Clone the repository and run **index.html** in your browser to test it.*
 
 ## Author:
 

@@ -45,15 +45,15 @@ const position = pointIsInsidePolygon(point, polygon);
 ```
 * If both arguments were provided correctly it will return an object with 3 keys:
 
-	1. **isInside** *(boolean):* `true` if the point was inside the polygon, and `false ` if not.
-	2. **isOutside** *(boolean):* `true` if the point was outside the polygon, and `false ` if not.
-	3. **isOnBorder** *(boolean):* `true` if the point was on the border of the polygon, and `false ` if not.
+	1. **isInside** *(boolean):* `true` if the point was inside the polygon, and `false` if not.
+	2. **isOutside** *(boolean):* `true` if the point was outside the polygon, and `false` if not.
+	3. **isOnBorder** *(boolean):* `true` if the point was on the border of the polygon, and `false` if not.
 
 ```
 {isInside: boolean, isOutside: boolean, isOnBorder: boolean}
 ```
 
-##Explanation:
+## Explanation:
 
 The relative position of the ***point*** to the ***polygon*** will be determined based on ***number of intersections*** between the ***polygon*** & the ***horizontal line*** drawn starting from the ***point*** toward ***increasing the x-axis***.
 * If ***number of intersections*** was ***odd***, then the ***point*** is inside the ***polygon***.
